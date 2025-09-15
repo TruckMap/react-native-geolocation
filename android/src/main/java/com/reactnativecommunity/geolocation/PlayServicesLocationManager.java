@@ -93,9 +93,10 @@ public class PlayServicesLocationManager extends BaseLocationManager {
 
     @Override
     public void stopObserving() {
-        if(mLocationCallback == null) {
+        if (mFusedLocationClient == null || mLocationCallback == null) {
             return;
         }
+        
         mFusedLocationClient.removeLocationUpdates(mLocationCallback);
     }
 
@@ -166,6 +167,10 @@ public class PlayServicesLocationManager extends BaseLocationManager {
                 }
 
                 callbackHolder.success(location);
+
+                if (mFusedLocationClient == null || mSingleLocationCallback == null) {
+                    return;
+                }
 
                 mFusedLocationClient.removeLocationUpdates(mSingleLocationCallback);
                 mSingleLocationCallback = null;
